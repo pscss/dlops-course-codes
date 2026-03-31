@@ -144,3 +144,7 @@ print('cuDNN version:', torch.backends.cudnn.version())
 print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A')
 "
 ```
+
+## CI/CD
+
+> **TODO:** GitHub Actions pipeline for automated testing, linting, and type checking on push/PR.
