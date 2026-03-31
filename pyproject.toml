@@ -1,0 +1,95 @@
+[project]
+name = "dlops-course-codes"
+version = "0.1.0"
+description = "DLOps course codes and notebooks - IIT Jodhpur M.Tech AI"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.4",
+    "pandas>=3.0.2",
+    "scikit-learn>=1.8.0",
+    "scipy>=1.17.1",
+    "torch>=2.11.0",
+    "torchvision>=0.26.0",
+]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.13.5",
+    "ipykernel>=7.2.0",
+    "mypy>=1.20.0",
+    "notebook>=7.5.5",
+    "poethepoet>=0.42.1",
+    "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.8",
+]
+
+[tool.poe]
+envfile = ".env"
+
+[tool.poe.tasks]
+# Development setup
+develop = "pre-commit install"
+pre-commit-check = "pre-commit run --all-files"
+
+# Testing
+test = "coverage run -m pytest"
+coverage = "coverage report -m --skip-covered"
+coverage-html = "coverage html -d coverage --skip-covered"
+
+# Code quality
+format = "ruff format ."
+lint = "ruff check ."
+fix = "ruff check --fix ."
+sort = "ruff check --select I --fix ."
+type-check = "mypy ."
+
+# Run all checks
+check = ["lint", "type-check", "test"]
+
+[tool.ruff]
+exclude = ["*.ipynb", "notebooks/"]
+target-version = "py312"
+line-length = 88
+src = [".", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["dlops_course_codes"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["."]
+omit = ["tests/*", ".venv/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.",
+    "pragma: no cover",
+]
